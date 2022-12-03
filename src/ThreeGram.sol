@@ -90,7 +90,7 @@ contract ThreeGram {
         onlyUser
     {
         require(bytes(_title).length > 0, "Post can't be empty!");
-        require(bytes(_media).length > 0, "Post can't be empty!");
+        require(bytes(_media).length > 0, "Media can't be empty!");
 
         string memory _username = usernames[msg.sender];
         Post memory _post = Post({
