@@ -10,6 +10,12 @@ contract ThreeGram {
         string indexed _media
     );
 
+    /// @notice State to track whether the contract is paused
+    bool public paused;
+
+    /// @notice The owner of the contract
+    address public owner;
+
     /// @notice User properties
     struct User {
         address wallet;
@@ -37,13 +43,22 @@ contract ThreeGram {
     /// @notice modifiers
     modifier newUser(string memory _username) {
         require(bytes(usernames[msg.sender]).length == 0, "Already a user!");
-        require(users[_username].wallet == address(0), "Username taken!");
+        require(users[_username].wallet == address(0), "Address taken!");
         _;
     }
 
     modifier onlyUser() {
         require(bytes(usernames[msg.sender]).length > 0, "Must be a user!");
         _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner!");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
     }
 
     /**
@@ -95,5 +110,27 @@ contract ThreeGram {
      */
     function getUsername(address _wallet) public view returns (string memory) {
         return bytes(usernames[_wallet]).length > 0 ? usernames[_wallet] : "";
+    }
+
+    /**
+     * @notice Retrieves a wallet's username if it exists
+     * @dev Returns an array of posts
+     */
+    function getPosts() public view returns (Post[] memory) {
+        return posts;
+    }
+
+    /**
+     * @dev Pauses this contract to prevent minting and burning
+     */
+    function pause(bool _pause) external onlyOwner {
+        paused = _pause;
+    }
+
+    /**
+     * @dev Sets a new  owner of the contract
+     */
+    function setOwner(address _newOwner) public onlyOwner {
+        owner = _newOwner;
     }
 }
