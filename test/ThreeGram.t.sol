@@ -8,7 +8,14 @@ contract ThreeGramTest is Test {
     ThreeGram public threegram;
     address public constant alice = address(0x1);
 
-    event CreateUser(address indexed _wallet, string indexed _username);
+    event CreateUser(
+        address indexed _wallet,
+        string indexed _username,
+        string _name,
+        string indexed _bio,
+        string _avatar
+    );
+
     event CreatePost(
         address indexed _author,
         string indexed _title,
@@ -65,7 +72,13 @@ contract ThreeGramTest is Test {
     function testCreateUser() public {
         vm.prank(alice);
         vm.expectEmit(true, true, true, true, address(threegram));
-        emit CreateUser(alice, "testUsername");
+        emit CreateUser(
+            alice,
+            "testUsername",
+            "testName",
+            "test bio",
+            "testAvatar"
+        );
         threegram.createUser(
             "testUsername",
             "testName",

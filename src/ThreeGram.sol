@@ -3,7 +3,14 @@ pragma solidity ^0.8.13;
 
 contract ThreeGram {
     /// @notice Events
-    event CreateUser(address indexed _wallet, string indexed _username);
+    /// @dev Indexing only 3 vars to fufill EVM storage capacity constraints
+    event CreateUser(
+        address indexed _wallet,
+        string indexed _username,
+        string _name,
+        string indexed _bio,
+        string _avatar
+    );
     event CreatePost(
         address indexed _author,
         string indexed _title,
@@ -79,7 +86,7 @@ contract ThreeGram {
         });
         usernames[msg.sender] = _username;
 
-        emit CreateUser(msg.sender, _username);
+        emit CreateUser(msg.sender, _username, _name, _bio, _avatar);
     }
 
     /**
@@ -113,8 +120,7 @@ contract ThreeGram {
     }
 
     /**
-     * @notice Retrieves a wallet's username if it exists
-     * @dev Returns an array of posts
+     * @notice Returns an array of posts
      */
     function getPosts() public view returns (Post[] memory) {
         return posts;
